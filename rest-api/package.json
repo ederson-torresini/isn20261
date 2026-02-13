@@ -4,5 +4,6 @@
   },
   "scripts": {
     "start": "node app.js"
-  }
+  },
+  "license": "MIT"
 }

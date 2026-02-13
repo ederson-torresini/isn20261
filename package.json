@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "install": "yarn --cwd rest-api",
+    "start": "yarn --cwd rest-api start"
+  },
+  "license": "MIT"
+}

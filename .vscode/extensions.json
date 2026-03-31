@@ -1,8 +1,5 @@
 {
   "recommendations": [
-    "ms-python.black-formatter",
-    "ms-python.python",
-    "pulumi.pulumi-vscode-tools",
-    "amazonwebservices.aws-toolkit-vscode"
+    "ms-python.black-formatter"
   ]
 }

@@ -39,7 +39,7 @@ São requisitos não funcionais:
 
 ## Diagrama de blocos
 
-Melhorar:
+Com serviços de nome genérico:
 
 ```mermaid
 flowchart TD
@@ -92,4 +92,69 @@ flowchart TD
     P --> ca
     P --> sql
     P --> tsdb
+```
+
+Com serviços AWS:
+
+```mermaid
+flowchart TD
+
+subgraph Usuários
+    Usuário
+end
+
+subgraph AWS
+    subgraph Frontends
+        Route53
+        CloudFront
+        S3
+    end
+
+    subgraph Backends
+        APIGatewayWebSocket
+        Lambda_WS
+        DynamoDB
+        SQS
+        Lambda_Proc
+        SecretManager
+        CloudWatch
+    end
+end
+
+subgraph Streamings
+    OMDB
+    Letterboxd
+end
+
+subgraph LLMs
+    Claude
+    ChatGPT
+end
+
+Usuário --> Route53
+Usuário --> CloudFront
+CloudFront --> S3
+CloudFront --> APIGatewayWebSocket
+APIGatewayWebSocket --> Lambda_WS
+Lambda_WS --> DynamoDB
+Lambda_WS --> SQS
+SQS --> Lambda_Proc
+Lambda_Proc --> SecretManager
+Lambda_Proc --> DynamoDB
+
+CloudWatch -.-> Route53
+CloudWatch -.-> CloudFront
+CloudWatch -.-> S3
+CloudWatch -.-> APIGatewayWebSocket
+CloudWatch -.-> Lambda_WS
+CloudWatch -.-> DynamoDB
+CloudWatch -.-> SQS
+CloudWatch -.-> Lambda_Proc
+CloudWatch -.-> SecretManager
+
+Lambda_Proc --> OMDB
+Lambda_Proc --> Letterboxd
+
+Lambda_Proc --> Claude
+Lambda_Proc --> ChatGPT
 ```

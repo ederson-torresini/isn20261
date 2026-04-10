@@ -12,7 +12,6 @@ São requisitos funcionais:
 1. Permitir a troca de senha.
 4. Permitir recuperação de senha por email.
 1. Permitir a troca de email de cadastro, desde que ambos os emails sejam validados.
-1. Prover autorização com RBAC para controle de acesso de classificação etária e perfil familiar aos serviços da solução.
 1. Realizar log de todas as operações realizadas pelo usuário.
 1. Permitir que o usuário peça um filme para assistir, o qual será entregue de forma aleatória de um banco de dados online.
 1. Permitir que o usuário informe os serviços de *streaming* atualmente assinados para fazer um filtro dos possíveis filmes já sob demanda e para alugar ou comprar.
@@ -112,7 +111,7 @@ subgraph AWS
     end
 
     subgraph Backends
-        APIGatewayWebSocket
+        APIGateway
         Lambda_WS
         DynamoDB
         SQS
@@ -136,9 +135,9 @@ Usuário --> Route53
 Usuário --> CloudFront
 CloudFront --> CertificateManager
 CloudFront --> S3
-CloudFront --> APIGatewayWebSocket
-APIGatewayWebSocket --> Lambda_WS
-APIGatewayWebSocket --> S3
+CloudFront --> APIGateway
+APIGateway --> Lambda_WS
+APIGateway --> S3
 Lambda_WS --> DynamoDB
 Lambda_WS --> SQS
 SQS --> Lambda_Proc
@@ -148,7 +147,7 @@ Lambda_Proc --> DynamoDB
 CloudWatch -.-> Route53
 CloudWatch -.-> CloudFront
 CloudWatch -.-> S3
-CloudWatch -.-> APIGatewayWebSocket
+CloudWatch -.-> APIGateway
 CloudWatch -.-> Lambda_WS
 CloudWatch -.-> DynamoDB
 CloudWatch -.-> SQS

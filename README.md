@@ -9,7 +9,7 @@ Para facilitar o uso da nuvem pública, AWS, foi criado um repositório (monorep
 Para AWS:
 
 - `AWS_ACCESS_KEY_ID`: identificador da chave de acesso ao AWS.
-- `export AWS_SECRET_ACCESS_KEY`: chave de acesso ao AWS, propriamente.
+- `AWS_SECRET_ACCESS_KEY`: chave de acesso ao AWS, propriamente.
 - `AWS_DEFAULT_REGION`: região da AWS. Por convenção, na equipe será adotado por padrão São Paulo (`sa-east-1`).
 
 Fonte: [Configuring environment variables for the AWS CLI

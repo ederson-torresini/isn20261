@@ -198,7 +198,7 @@ paths:
       tags:
         - users
       parameters:
-        - in: path
+        - in: query
           name: token
           required: true
           schema:

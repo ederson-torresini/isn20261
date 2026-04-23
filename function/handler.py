@@ -31,20 +31,29 @@ def handler(event, context):
 
     for definition in tables:
         try:
-            dynamodb.create_table(**definition)
+            created_table = dynamodb.create_table(**definition)
+            created_table.wait_until_exists()
         except ClientError as e:
             if e.response["Error"]["Code"] == "ResourceInUseException":
                 print(f"⚠️  Tabela '{definition['TableName']}' já existe")
             else:
                 raise
 
+    sub = event.get("sub")
+    if not isinstance(sub, str) or not sub.strip():
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": "Missing or invalid required field: sub"}),
+            "headers": {"Content-Type": "application/json"},
+        }
+
     item = {
-        "sub": event.get("sub"),
+        "sub": sub,
         "email": event.get("email", "")
     }
 
     table.put_item(Item=item)
-    result = table.get_item(Key={"sub": event.get("sub")})
+    result = table.get_item(Key={"sub": sub})
     saved_item = result.get("Item", {})
 
     return {

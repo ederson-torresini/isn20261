@@ -1,7 +1,7 @@
 import os
 import boto3
 
-_resource = boto3.resource("dynamodb")
+_resource = boto3.resource("dynamodb", region_name=os.environ.get("AWS_REGION", "sa-east-1"))
 
 USERS_TABLE     = os.environ.get("USERS_TABLE",       "Users")
 EMAIL_TO_SUB    = os.environ.get("EMAIL_TO_SUB_TABLE", "EmailToSub")

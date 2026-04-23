@@ -1,0 +1,11 @@
+services:
+  dynamodb-local:
+    image: amazon/dynamodb-local
+    container_name: dynamodb-local
+    networks:
+      - sam-local
+    command: -jar DynamoDBLocal.jar -sharedDb
+
+networks:
+  sam-local:
+    name: sam-local

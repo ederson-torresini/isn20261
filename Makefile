@@ -2,8 +2,6 @@ all: install
 
 install: aws_cli aws_sam_cli pulumi uv
 
-run: lambda-run
-
 aws_cli:
 	curl -sL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 	unzip awscliv2.zip
@@ -30,5 +28,15 @@ pulumi:
 uv:
 	curl -LsSf https://astral.sh/uv/install.sh | sh
 
-lambda-run:
-	sam local invoke -t template.yaml -e event.json
+sam: sam-start sam-stop
+
+sam-start: sam-dynamodb sam-lambda
+
+sam-dynamodb:
+	docker compose up -d
+
+sam-lambda:
+	sam local invoke -t template.yaml -e event.json --docker-network sam-local
+
+sam-stop:
+	docker compose down

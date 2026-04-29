@@ -11,20 +11,52 @@ is_prod = env == "prod"
 domain_name = config.get("domainName") if is_prod else None
 
 # --- 2. DynamoDB Tables ---
-users_table = aws.dynamodb.Table(
-    f"users-table-{env}",
-    name=f"users_{env}",
+email_to_sub_table = aws.dynamodb.Table(
+    f"email-to-sub-table-{env}",
+    name=f"EmailToSub_{env}",
     billing_mode="PAY_PER_REQUEST",
-    hash_key="user_id",
-    attributes=[aws.dynamodb.TableAttributeArgs(name="user_id", type="S")],
+    hash_key="email",
+    attributes=[aws.dynamodb.TableAttributeArgs(name="email", type="S")],
 )
 
-recommendations_table = aws.dynamodb.Table(
-    f"recommendations-table-{env}",
-    name=f"recommendations_{env}",
+users_table = aws.dynamodb.Table(
+    f"users-table-{env}",
+    name=f"Users_{env}",
     billing_mode="PAY_PER_REQUEST",
-    hash_key="user_id",
-    attributes=[aws.dynamodb.TableAttributeArgs(name="user_id", type="S")],
+    hash_key="sub",
+    attributes=[aws.dynamodb.TableAttributeArgs(name="sub", type="S")],
+)
+
+tokens_table = aws.dynamodb.Table(
+    f"tokens-table-{env}",
+    name=f"Tokens_{env}",
+    billing_mode="PAY_PER_REQUEST",
+    hash_key="token",
+    attributes=[aws.dynamodb.TableAttributeArgs(name="token", type="S")],
+)
+
+historico_table = aws.dynamodb.Table(
+    f"historico-table-{env}",
+    name=f"Historico_{env}",
+    billing_mode="PAY_PER_REQUEST",
+    hash_key="sub",
+    range_key="timestamp",
+    attributes=[
+        aws.dynamodb.TableAttributeArgs(name="sub", type="S"),
+        aws.dynamodb.TableAttributeArgs(name="timestamp", type="S"),
+    ],
+)
+
+logs_table = aws.dynamodb.Table(
+    f"logs-table-{env}",
+    name=f"Logs_{env}",
+    billing_mode="PAY_PER_REQUEST",
+    hash_key="sub",
+    range_key="timestamp",
+    attributes=[
+        aws.dynamodb.TableAttributeArgs(name="sub", type="S"),
+        aws.dynamodb.TableAttributeArgs(name="timestamp", type="S"),
+    ],
 )
 
 # --- 3. Amazon Cognito ---
@@ -65,7 +97,13 @@ aws.iam.RolePolicyAttachment(
 aws.iam.RolePolicy(
     f"lambda-dynamodb-cognito-policy-{env}",
     role=lambda_role.name,
-    policy=pulumi.Output.all(users_table.arn, recommendations_table.arn).apply(
+    policy=pulumi.Output.all(
+        email_to_sub_table.arn,
+        users_table.arn,
+        tokens_table.arn,
+        historico_table.arn,
+        logs_table.arn,
+    ).apply(
         lambda arns: json.dumps(
             {
                 "Version": "2012-10-17",
@@ -97,8 +135,11 @@ aws.iam.RolePolicy(
 
 # --- 5. AWS Lambdas ---
 env_vars = {
+    "EMAIL_TO_SUB_TABLE": email_to_sub_table.name,
     "USERS_TABLE": users_table.name,
-    "RECOMMENDATIONS_TABLE": recommendations_table.name,
+    "TOKENS_TABLE": tokens_table.name,
+    "HISTORICO_TABLE": historico_table.name,
+    "LOGS_TABLE": logs_table.name,
     "USER_POOL_ID": user_pool.id,
     "CLIENT_ID": user_pool_client.id,
 }

@@ -49,9 +49,9 @@ def handler(event, context):
         return forbidden("Email already in use")
 
     now        = datetime.now(timezone.utc)
-        expires_dt = now + timedelta(hours=24)
-        expires_at = expires_dt.isoformat()
-        ttl = int(expires_dt.timestamp())
+    expires_dt = now + timedelta(hours=24)
+    expires_at = expires_dt.isoformat()
+    ttl = int(expires_dt.timestamp())
     token_value = secrets.token_hex(32)
 
     tokens().put_item(Item={
@@ -59,7 +59,7 @@ def handler(event, context):
         "sub":       sub,
         "type":      "verify-email",
         "expiresAt": expires_at,
-            "ttl":       ttl,
+        "ttl":  ttl,
         "newEmail":  new_email,   # extends Token schema — see inconsistencias.md
     })
     write_log(sub, now.isoformat(), "CHANGE_EMAIL_REQUESTED", {"newEmail": new_email})

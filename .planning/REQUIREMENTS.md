@@ -117,26 +117,72 @@ Deferred — covered by future GitHub issues outside this milestone.
 
 ## Traceability
 
-Populated by `gsd-roadmapper`. Each requirement maps to exactly one phase.
+Populated by `gsd-roadmapper` on 2026-05-04. Each requirement maps to exactly one phase.
 
-| Requirement | Phase | Status |
-|-------------|-------|--------|
-| FOUND-01..07 | Phase 1 (issue #90) | Pending |
-| DSGN-01..06 | Phase 2 (issue #91) | Pending |
-| LAYT-01..05 | Phase 3 (issue #92) | Pending |
-| AUTH-01..07 | Phase 4 (issue #93) | Pending |
-| AUTH-08..13 | Phase 5 (issue #94) | Pending |
-| HOME-01..05 | Phase 6 (issue #95) | Pending |
-| RECO-01..04 | Phase 7 (issue #96) | Pending |
-| PREF-01..05 | Phase 8 (issue #97) | Pending |
-| HIST-01..05 | Phase 9 (issue #98) | Pending |
-| WTCL-01..05 | Phase 10 (issue #99) | Pending |
+| Requirement | Phase | GitHub Issue | Status |
+|-------------|-------|--------------|--------|
+| FOUND-01 | Phase 1 (Foundation) | #90 | Pending |
+| FOUND-02 | Phase 1 (Foundation) | #90 | Pending |
+| FOUND-03 | Phase 1 (Foundation) | #90 | Pending |
+| FOUND-04 | Phase 1 (Foundation) | #90 | Pending |
+| FOUND-05 | Phase 1 (Foundation) | #90 | Pending |
+| FOUND-06 | Phase 1 (Foundation) | #90 | Pending |
+| FOUND-07 | Phase 1 (Foundation) | #90 | Pending |
+| DSGN-01 | Phase 2 (Design System) | #91 | Pending |
+| DSGN-02 | Phase 2 (Design System) | #91 | Pending |
+| DSGN-03 | Phase 2 (Design System) | #91 | Pending |
+| DSGN-04 | Phase 2 (Design System) | #91 | Pending |
+| DSGN-05 | Phase 2 (Design System) | #91 | Pending |
+| DSGN-06 | Phase 2 (Design System) | #91 | Pending |
+| LAYT-01 | Phase 3 (Layout) | #92 | Pending |
+| LAYT-02 | Phase 3 (Layout) | #92 | Pending |
+| LAYT-03 | Phase 3 (Layout) | #92 | Pending |
+| LAYT-04 | Phase 3 (Layout) | #92 | Pending |
+| LAYT-05 | Phase 3 (Layout) | #92 | Pending |
+| AUTH-01 | Phase 4 (Login + Register UI) | #93 | Pending |
+| AUTH-02 | Phase 4 (Login + Register UI) | #93 | Pending |
+| AUTH-03 | Phase 4 (Login + Register UI) | #93 | Pending |
+| AUTH-04 | Phase 4 (Login + Register UI) | #93 | Pending |
+| AUTH-05 | Phase 4 (Login + Register UI) | #93 | Pending |
+| AUTH-06 | Phase 4 (Login + Register UI) | #93 | Pending |
+| AUTH-07 | Phase 4 (Login + Register UI) | #93 | Pending |
+| AUTH-08 | Phase 5 (Auth Context + Protected Routes) | #94 | Pending |
+| AUTH-09 | Phase 5 (Auth Context + Protected Routes) | #94 | Pending |
+| AUTH-10 | Phase 5 (Auth Context + Protected Routes) | #94 | Pending |
+| AUTH-11 | Phase 5 (Auth Context + Protected Routes) | #94 | Pending |
+| AUTH-12 | Phase 5 (Auth Context + Protected Routes) | #94 | Pending |
+| AUTH-13 | Phase 5 (Auth Context + Protected Routes) | #94 | Pending |
+| HOME-01 | Phase 6 (Home / Hero) | #95 | Pending |
+| HOME-02 | Phase 6 (Home / Hero) | #95 | Pending |
+| HOME-03 | Phase 6 (Home / Hero) | #95 | Pending |
+| HOME-04 | Phase 6 (Home / Hero) | #95 | Pending |
+| HOME-05 | Phase 6 (Home / Hero) | #95 | Pending |
+| RECO-01 | Phase 7 (Recommendation Result) | #96 | Pending |
+| RECO-02 | Phase 7 (Recommendation Result) | #96 | Pending |
+| RECO-03 | Phase 7 (Recommendation Result) | #96 | Pending |
+| RECO-04 | Phase 7 (Recommendation Result) | #96 | Pending |
+| PREF-01 | Phase 8 (Preferences) | #97 | Pending |
+| PREF-02 | Phase 8 (Preferences) | #97 | Pending |
+| PREF-03 | Phase 8 (Preferences) | #97 | Pending |
+| PREF-04 | Phase 8 (Preferences) | #97 | Pending |
+| PREF-05 | Phase 8 (Preferences) | #97 | Pending |
+| HIST-01 | Phase 9 (History) | #98 | Pending |
+| HIST-02 | Phase 9 (History) | #98 | Pending |
+| HIST-03 | Phase 9 (History) | #98 | Pending |
+| HIST-04 | Phase 9 (History) | #98 | Pending |
+| HIST-05 | Phase 9 (History) | #98 | Pending |
+| WTCL-01 | Phase 10 (Watch Later) | #99 | Pending |
+| WTCL-02 | Phase 10 (Watch Later) | #99 | Pending |
+| WTCL-03 | Phase 10 (Watch Later) | #99 | Pending |
+| WTCL-04 | Phase 10 (Watch Later) | #99 | Pending |
+| WTCL-05 | Phase 10 (Watch Later) | #99 | Pending |
 
 **Coverage:**
 - v1 requirements: 56 total
-- Mapped to phases: 56 (pending roadmapper confirmation)
+- Mapped to phases: 56 (confirmed by gsd-roadmapper, 2026-05-04)
 - Unmapped: 0
+- Duplicates across phases: 0
 
 ---
 *Requirements defined: 2026-05-04*
-*Last updated: 2026-05-04 after initialization*
+*Last updated: 2026-05-04 — Traceability table populated and confirmed by gsd-roadmapper*

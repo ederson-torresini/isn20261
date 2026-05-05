@@ -156,9 +156,10 @@ def create_lambda(name, entry_point):
     )
 
 
-register_lambda = create_lambda("register", "register.handler")
-login_lambda = create_lambda("login", "login.handler")
 recommend_lambda = create_lambda("recommend", "recommend.handler")
+history_lambda = create_lambda("history", "history.handler")
+preferences_lambda = create_lambda("preferences", "preferences.handler")
+watch_later_lambda = create_lambda("watch_later", "watch_later.handler")
 
 # --- 6. API Gateway v2 (HTTP API) ---
 api = aws.apigatewayv2.Api(f"http-api-{env}", protocol_type="HTTP")
@@ -210,9 +211,10 @@ def create_route(path, method, lambda_func, auth_id=None):
 
 
 # Rotas com o prefixo /api/v1/
-create_route("/api/v1/register", "POST", register_lambda)
-create_route("/api/v1/login", "POST", login_lambda)
 create_route("/api/v1/recommend", "GET", recommend_lambda, auth_id=authorizer.id)
+create_route("/api/v1/history", "GET", history_lambda, auth_id=authorizer.id)
+create_route("/api/v1/preferences", ["GET","POST"], preferences_lambda, auth_id=authorizer.id)
+create_route("/api/v1/watch-later", ["GET","POST"], watch_later_lambda, auth_id=authorizer.id)
 
 stage = aws.apigatewayv2.Stage(
     f"api-stage-{env}", api_id=api.id, name="$default", auto_deploy=True

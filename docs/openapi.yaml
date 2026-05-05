@@ -225,13 +225,13 @@ paths:
             schema:
               type: object
               properties:
-                title:
+                movieId:
                   type: string
                   minLength: 1
                   maxLength: 255
-                  example: "The Matrix"
+                  example: "tt0133093"
               required:
-                - title
+                - movieId
       responses:
         "201":
           description: Created

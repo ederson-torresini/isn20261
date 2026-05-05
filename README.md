@@ -15,56 +15,217 @@ No serviço [IAM](https://console.aws.amazon.com/iam/):
 
 ```json
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": "iam:PassRole",
-            "Resource": "arn:aws:iam::*:role/*",
-            "Condition": {
-                "StringEquals": {
-                    "iam:PassedToService": "lambda.amazonaws.com"
-                }
-            }
-        },
-        {
-            "Sid": "VisualEditor1",
-            "Effect": "Allow",
-            "Action": [
-                "iam:GetRole",
-                "iam:UntagRole",
-                "iam:TagRole",
-                "iam:CreateRole",
-                "iam:DeleteRole",
-                "iam:AttachRolePolicy",
-                "iam:PutRolePolicy",
-                "iam:ListInstanceProfilesForRole",
-                "iam:DetachRolePolicy",
-                "iam:ListAttachedRolePolicies",
-                "iam:DeleteRolePolicy",
-                "iam:UpdateRole",
-                "iam:ListRolePolicies",
-                "iam:GetRolePolicy"
-            ],
-            "Resource": "arn:aws:iam::*:role/*"
-        },
-        {
-            "Sid": "VisualEditor2",
-            "Effect": "Allow",
-            "Action": [
-                "cloudfront:*",
-                "apigateway:*",
-                "s3:*",
-                "route53:*",
-                "lambda:*",
-                "dynamodb:*",
-                "cognito-idp:*",
-                "acm:*"
-            ],
-            "Resource": "*"
-        }
-    ]
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "IAMPassRole",
+			"Effect": "Allow",
+			"Action": "iam:PassRole",
+			"Resource": "arn:aws:iam::*:role/lambda-role-*",
+			"Condition": {
+				"StringEquals": {
+					"iam:PassedToService": "lambda.amazonaws.com"
+				}
+			}
+		},
+		{
+			"Sid": "IAMRoleManagement",
+			"Effect": "Allow",
+			"Action": [
+				"iam:GetRole",
+				"iam:CreateRole",
+				"iam:DeleteRole",
+				"iam:UpdateRole",
+				"iam:TagRole",
+				"iam:UntagRole",
+				"iam:AttachRolePolicy",
+				"iam:DetachRolePolicy",
+				"iam:PutRolePolicy",
+				"iam:GetRolePolicy",
+				"iam:ListRolePolicies",
+				"iam:ListAttachedRolePolicies",
+				"iam:ListInstanceProfilesForRole",
+				"iam:DeleteRolePolicy"
+			],
+			"Resource": "arn:aws:iam::*:role/lambda-role-*"
+		},
+		{
+			"Sid": "DynamoDBTableManagement",
+			"Effect": "Allow",
+			"Action": [
+				"dynamodb:CreateTable",
+				"dynamodb:DeleteTable",
+				"dynamodb:DescribeTable",
+				"dynamodb:UpdateTable",
+				"dynamodb:ListTagsOfResource",
+				"dynamodb:TagResource",
+				"dynamodb:UntagResource",
+				"dynamodb:DescribeTimeToLive",
+				"dynamodb:DescribeContinuousBackups",
+				"dynamodb:ListTables"
+			],
+			"Resource": [
+				"arn:aws:dynamodb:sa-east-1:*:table/EmailToSub_*",
+				"arn:aws:dynamodb:sa-east-1:*:table/Users_*",
+				"arn:aws:dynamodb:sa-east-1:*:table/Tokens_*",
+				"arn:aws:dynamodb:sa-east-1:*:table/Historico_*",
+				"arn:aws:dynamodb:sa-east-1:*:table/Logs_*"
+			]
+		},
+		{
+			"Sid": "CognitoManagement",
+			"Effect": "Allow",
+			"Action": [
+				"cognito-idp:CreateUserPool",
+				"cognito-idp:DeleteUserPool",
+				"cognito-idp:DescribeUserPool",
+				"cognito-idp:UpdateUserPool",
+				"cognito-idp:TagResource",
+				"cognito-idp:UntagResource",
+				"cognito-idp:ListTagsForResource",
+				"cognito-idp:CreateUserPoolClient",
+				"cognito-idp:DeleteUserPoolClient",
+				"cognito-idp:DescribeUserPoolClient",
+				"cognito-idp:UpdateUserPoolClient",
+				"cognito-idp:ListUserPoolClients"
+			],
+			"Resource": "arn:aws:cognito-idp:sa-east-1:*:userpool/*"
+		},
+		{
+			"Sid": "LambdaManagement",
+			"Effect": "Allow",
+			"Action": [
+				"lambda:CreateFunction",
+				"lambda:DeleteFunction",
+				"lambda:GetFunction",
+				"lambda:GetFunctionConfiguration",
+				"lambda:UpdateFunctionCode",
+				"lambda:UpdateFunctionConfiguration",
+				"lambda:AddPermission",
+				"lambda:RemovePermission",
+				"lambda:GetPolicy",
+				"lambda:ListVersionsByFunction",
+				"lambda:TagResource",
+				"lambda:UntagResource",
+				"lambda:ListTags"
+			],
+			"Resource": [
+				"arn:aws:lambda:sa-east-1:*:function:register-*",
+				"arn:aws:lambda:sa-east-1:*:function:login-*",
+				"arn:aws:lambda:sa-east-1:*:function:recommend-*"
+			]
+		},
+		{
+			"Sid": "APIGatewayManagement",
+			"Effect": "Allow",
+			"Action": [
+				"apigateway:GET",
+				"apigateway:POST",
+				"apigateway:PUT",
+				"apigateway:PATCH",
+				"apigateway:DELETE"
+			],
+			"Resource": [
+				"arn:aws:apigateway:sa-east-1::/apis",
+				"arn:aws:apigateway:sa-east-1::/apis/*"
+			]
+		},
+		{
+			"Sid": "S3BucketManagement",
+			"Effect": "Allow",
+			"Action": [
+				"s3:CreateBucket",
+				"s3:DeleteBucket",
+				"s3:ListBucket",
+				"s3:ListAllMyBuckets",
+				"s3:GetBucketPolicy",
+				"s3:PutBucketPolicy",
+				"s3:DeleteBucketPolicy",
+				"s3:GetBucketAcl",
+				"s3:GetBucketLocation",
+				"s3:GetBucketTagging",
+				"s3:PutBucketTagging",
+				"s3:GetBucketVersioning",
+				"s3:GetBucketCORS",
+				"s3:GetBucketWebsite",
+				"s3:GetEncryptionConfiguration",
+				"s3:GetLifecycleConfiguration",
+				"s3:GetBucketPublicAccessBlock",
+				"s3:PutBucketPublicAccessBlock",
+				"s3:GetBucketOwnershipControls"
+			],
+			"Resource": "arn:aws:s3:::frontend-bucket-*"
+		},
+		{
+			"Sid": "S3ObjectManagement",
+			"Effect": "Allow",
+			"Action": [
+				"s3:GetObject",
+				"s3:PutObject",
+				"s3:DeleteObject"
+			],
+			"Resource": "arn:aws:s3:::frontend-bucket-*/*"
+		},
+		{
+			"Sid": "CloudFrontManagement",
+			"Effect": "Allow",
+			"Action": [
+				"cloudfront:CreateDistribution",
+				"cloudfront:GetDistribution",
+				"cloudfront:GetDistributionConfig",
+				"cloudfront:UpdateDistribution",
+				"cloudfront:DeleteDistribution",
+				"cloudfront:ListDistributions",
+				"cloudfront:CreateOriginAccessControl",
+				"cloudfront:GetOriginAccessControl",
+				"cloudfront:UpdateOriginAccessControl",
+				"cloudfront:DeleteOriginAccessControl",
+				"cloudfront:ListOriginAccessControls",
+				"cloudfront:CreateCachePolicy",
+				"cloudfront:GetCachePolicy",
+				"cloudfront:UpdateCachePolicy",
+				"cloudfront:DeleteCachePolicy",
+				"cloudfront:ListCachePolicies",
+				"cloudfront:CreateOriginRequestPolicy",
+				"cloudfront:GetOriginRequestPolicy",
+				"cloudfront:UpdateOriginRequestPolicy",
+				"cloudfront:DeleteOriginRequestPolicy",
+				"cloudfront:ListOriginRequestPolicies",
+				"cloudfront:TagResource",
+				"cloudfront:UntagResource",
+				"cloudfront:ListTagsForResource"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "ACMCertificateManagement",
+			"Effect": "Allow",
+			"Action": [
+				"acm:RequestCertificate",
+				"acm:DescribeCertificate",
+				"acm:DeleteCertificate",
+				"acm:ListCertificates",
+				"acm:ListTagsForCertificate",
+				"acm:AddTagsToCertificate",
+				"acm:RemoveTagsFromCertificate"
+			],
+			"Resource": "arn:aws:acm:us-east-1:*:certificate/*"
+		},
+		{
+			"Sid": "Route53Management",
+			"Effect": "Allow",
+			"Action": [
+				"route53:GetHostedZone",
+				"route53:ListHostedZones",
+				"route53:ListHostedZonesByName",
+				"route53:ChangeResourceRecordSets",
+				"route53:GetChange",
+				"route53:ListResourceRecordSets",
+				"route53:ListTagsForResource"
+			],
+			"Resource": "*"
+		}
+	]
 }
 ```
 

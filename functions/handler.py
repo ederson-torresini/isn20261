@@ -8,7 +8,6 @@ def handler(event, context):
     endpoint_url = os.environ.get("DYNAMODB_ENDPOINT_URL")
     host = os.environ.get("DYNAMODB_HOST")
     port = os.environ.get("DYNAMODB_PORT", "8000")
-    region = os.environ.get("AWS_REGION") or os.environ.get("AWS_DEFAULT_REGION")
     table_name = os.environ.get("DYNAMODB_TABLE", "isn20261")
 
     resource_kwargs = {"service_name": "dynamodb"}
@@ -25,10 +24,8 @@ def handler(event, context):
             resource_kwargs["aws_access_key_id"] = key_id
         if secret_key:
             resource_kwargs["aws_secret_access_key"] = secret_key
-        if region:
-            resource_kwargs["region_name"] = region
-    elif region:
-        resource_kwargs["region_name"] = region
+
+    resource_kwargs["region_name"] = os.environ.get("AWS_REGION", "sa-east-1")
 
     dynamodb = boto3.resource(**resource_kwargs)
     table = dynamodb.Table(table_name)

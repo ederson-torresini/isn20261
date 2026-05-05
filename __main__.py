@@ -144,6 +144,14 @@ env_vars = {
     "CLIENT_ID": user_pool_client.id,
 }
 
+shared_layer = aws.lambda_.LayerVersion(
+    "shared",
+    layer_name="shared",
+    code=pulumi.FileArchive("./functions/shared"),
+    compatible_runtimes=["python3.13"],
+    description="My shared utility functions",
+)
+
 
 def create_lambda(name, entry_point):
     return aws.lambda_.Function(
@@ -153,12 +161,13 @@ def create_lambda(name, entry_point):
         handler=entry_point,
         code=pulumi.FileArchive(f"./functions/{name}"),
         environment=aws.lambda_.FunctionEnvironmentArgs(variables=env_vars),
+        layers=[shared_layer.arn],
     )
 
 
-recommend_lambda = create_lambda("recommend", "recommend.handler")
 history_lambda = create_lambda("history", "history.handler")
 preferences_lambda = create_lambda("preferences", "preferences.handler")
+recommend_lambda = create_lambda("recommend", "recommend.handler")
 watch_later_lambda = create_lambda("watch_later", "watch_later.handler")
 
 # --- 6. API Gateway v2 (HTTP API) ---
@@ -182,16 +191,20 @@ authorizer = aws.apigatewayv2.Authorizer(
 
 
 def create_route(path, method, lambda_func, auth_id=None):
+    # Remove as barras para criar nomes seguros no Pulumi
+    safe_path = path.replace("/", "")
+
+    # Adicionamos o 'method' no nome do recurso para evitar conflitos no Pulumi
     integration = aws.apigatewayv2.Integration(
-        f"integration-{path.replace('/', '')}-{env}",
+        f"integration-{method}-{safe_path}-{env}",
         api_id=api.id,
         integration_type="AWS_PROXY",
-        integration_method="POST",
+        integration_method="POST",  # ATENÇÃO: a integração com Lambda proxy no AWS é sempre POST, não mude isso.
         integration_uri=lambda_func.invoke_arn,
     )
 
     aws.lambda_.Permission(
-        f"api-gw-permission-{path.replace('/', '')}-{env}",
+        f"api-gw-permission-{method}-{safe_path}-{env}",
         action="lambda:InvokeFunction",
         principal="apigateway.amazonaws.com",
         function=lambda_func.name,
@@ -200,21 +213,24 @@ def create_route(path, method, lambda_func, auth_id=None):
 
     route_args = {
         "api_id": api.id,
-        "route_key": f"{method} {path}",
+        "route_key": f"{method} {path}",  # Define se a rota responderá a GET ou POST
         "target": pulumi.Output.concat("integrations/", integration.id),
     }
     if auth_id:
         route_args["authorization_type"] = "JWT"
         route_args["authorizer_id"] = auth_id
 
-    aws.apigatewayv2.Route(f"route-{path.replace('/', '')}-{env}", **route_args)
+    aws.apigatewayv2.Route(f"route-{method}-{safe_path}-{env}", **route_args)
 
 
 # Rotas com o prefixo /api/v1/
-create_route("/api/v1/recommend", "GET", recommend_lambda, auth_id=authorizer.id)
 create_route("/api/v1/history", "GET", history_lambda, auth_id=authorizer.id)
-create_route("/api/v1/preferences", ["GET","POST"], preferences_lambda, auth_id=authorizer.id)
-create_route("/api/v1/watch-later", ["GET","POST"], watch_later_lambda, auth_id=authorizer.id)
+create_route("/api/v1/preferences", "GET", preferences_lambda, auth_id=authorizer.id)
+create_route("/api/v1/preferences", "POST", preferences_lambda, auth_id=authorizer.id)
+create_route("/api/v1/recommend", "GET", recommend_lambda, auth_id=authorizer.id)
+create_route("/api/v1/watch-later", "GET", watch_later_lambda, auth_id=authorizer.id)
+create_route("/api/v1/watch-later", "POST", watch_later_lambda, auth_id=authorizer.id)
+
 
 stage = aws.apigatewayv2.Stage(
     f"api-stage-{env}", api_id=api.id, name="$default", auto_deploy=True
@@ -311,7 +327,7 @@ s3_cache_policy = aws.cloudfront.CachePolicy(
     ),
 )
 
-# Política de Cache para a API (Desabilita o cache totalmente, vital para POST/Login)
+# Política de Cache para a API (Desabilita o cache totalmente, vital para POST)
 api_cache_policy = aws.cloudfront.CachePolicy(
     f"api-cache-{env}",
     name=f"API-Cache-Policy-{env}",
@@ -453,6 +469,7 @@ if is_prod and domain_name:
     )
 
 # --- 8. Outputs ---
+
 
 # Função para formatar a URL final dependendo do ambiente
 def format_url(args):
